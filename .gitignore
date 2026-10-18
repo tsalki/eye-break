@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# Compiled app (built by install.sh on each Mac)
+/eye-break
+*.dSYM/
+
+# Logs from local test runs
+*.log
