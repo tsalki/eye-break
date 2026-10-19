@@ -103,23 +103,6 @@ rm -r ~/Library/Application\ Support/eye-break
 rm ~/Library/Logs/eye-break.log ~/Library/Logs/eye-break.err.log   # optional: your history
 ```
 
-## Another Mac
-
-Copy this folder over (AirDrop, iCloud Drive, git) and run `./install.sh` there. The app is compiled on each Mac, so it works on both Intel and Apple Silicon.
-
-## Source files
-
-| File | What it is |
-|---|---|
-| `src/main.swift` | Entry point: runs the app, or `stats` |
-| `src/Settings.swift` | All tuning: mode, interval, break length, timeouts |
-| `src/Scheduler.swift` | The timer and all the rules; no UI |
-| `src/MenuBar.swift` | Menu bar icon and menu; feeds the scheduler sleep, wake and lock events |
-| `src/Reminders.swift` | The corner panel, and strict mode's warning and black overlay |
-| `src/Checks.swift` | Idle time, lock, camera, display-held checks |
-| `src/Log.swift` | Event log and stats |
-| `src/com.tsalki.eye-break.plist` | LaunchAgent: start at login, restart after a crash |
-
 ## License
 
 MIT. See [LICENSE](LICENSE).
