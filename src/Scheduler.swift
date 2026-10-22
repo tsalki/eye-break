@@ -103,6 +103,15 @@ final class Scheduler {
         onChange()
     }
 
+    /// The interval changed: start a fresh cycle with it.
+    func restartTimer() {
+        guard pausedUntil == nil, current == nil else { return }
+        nextBreak = now() + Settings.interval
+        retried = false
+        holdingForCamera = false
+        onChange()
+    }
+
     func resume() {
         pausedUntil = nil
         nextBreak = now() + Settings.interval

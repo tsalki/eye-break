@@ -58,7 +58,7 @@ login ──► LaunchAgent (RunAtLoad, KeepAlive on crash only)
 | File | Role |
 |---|---|
 | `src/main.swift` | Entry point: `eye-break` runs the app, `eye-break stats` prints stats. Single-instance lock via `flock` |
-| `src/Settings.swift` | All tuning constants, with environment-variable overrides for testing |
+| `src/Settings.swift` | All tuning constants, the saved menu choices, and environment-variable overrides for testing |
 | `src/Scheduler.swift` | The timer and every rule in this document. No UI code |
 | `src/MenuBar.swift` | Status item and menu; owns the Scheduler and forwards ticks and system events to it |
 | `src/Reminders.swift` | On-screen reminders: Nudge (gentle mode), Warning and Overlay (strict mode) |
@@ -111,7 +111,8 @@ Enabled by changing the default `mode` in `src/Settings.swift` to `.strict`, or 
 ### 6.4 Menu bar
 
 - **Icon:** `eye` with minutes left (`14m`). It changes to `eye.slash` when paused, `video` while a due break waits for the camera, and `eye.fill` while a reminder is showing.
-- **Menu:** a status line, Take a Break Now (disabled while one is showing), Pause for 1 Hour and Pause Until Tomorrow (or Resume), today's taken/missed counts and streak, Open Log, and Quit.
+- **Menu:** a status line, Take a Break Now (disabled while one is showing), Pause for 1 Hour and Pause Until Tomorrow (or Resume), a Settings submenu, today's taken/missed counts and streak, Open Log, and Quit.
+- **Settings** offers Break Every (20, 29, 42, 60 min) and Break Length (10, 20, 30, 60 s), with the current one checked. Choices are saved in `~/Library/Preferences/com.tsalki.eye-break.plist`. A new interval restarts the countdown, unless paused or a reminder is showing, in which case it applies from the next cycle. A new break length applies from the next reminder, or right away to one already counting down.
 - **Pausing** takes down any reminder. While paused, sleep and lock aren't logged. The pause ends on its own.
 - **Quit** exits cleanly, and the LaunchAgent only restarts the app after a crash (`KeepAlive` → `SuccessfulExit: false`), so it stays off until the next login.
 
@@ -160,7 +161,7 @@ Enabled by changing the default `mode` in `src/Settings.swift` to `.strict`, or 
 
 ## 9. Configuration
 
-All settings are constants in `src/Settings.swift`. Edit them, then re-run `./install.sh`.
+All settings are constants in `src/Settings.swift`. Edit them, then re-run `./install.sh`. `interval` and `breakLength` can also be changed from the Settings menu (§6.4); a saved choice wins over the default in the source, and an environment override wins over both.
 
 | Setting | Default | Environment override |
 |---|---|---|

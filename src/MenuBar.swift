@@ -88,6 +88,8 @@ final class MenuBar: NSObject, NSApplicationDelegate, NSMenuDelegate {
             menu.addItem(action("Pause Until Tomorrow", #selector(pauseTomorrow)))
         }
 
+        menu.addItem(settingsItem())
+
         menu.addItem(.separator())
         if let stats = Log.stats() {
             menu.addItem(info("Today: \(stats.takenToday) taken · \(stats.missesToday) missed"))
@@ -97,6 +99,42 @@ final class MenuBar: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
         menu.addItem(.separator())
         menu.addItem(action("Quit Eye Break", #selector(quit)))
+    }
+
+    private func settingsItem() -> NSMenuItem {
+        let submenu = NSMenu()
+        submenu.autoenablesItems = false
+        submenu.addItem(.sectionHeader(title: "Break Every"))
+        for seconds in choices(Settings.intervalChoices, current: Settings.interval) {
+            submenu.addItem(choice(seconds, current: Settings.interval, #selector(setInterval)))
+        }
+        submenu.addItem(.separator())
+        submenu.addItem(.sectionHeader(title: "Break Length"))
+        for seconds in choices(Settings.breakLengthChoices, current: Settings.breakLength) {
+            submenu.addItem(choice(seconds, current: Settings.breakLength, #selector(setBreakLength)))
+        }
+        let item = NSMenuItem(title: "Settings", action: nil, keyEquivalent: "")
+        item.submenu = submenu
+        return item
+    }
+
+    /// The usual choices, plus the current value if it's something else
+    /// (say, from an environment override).
+    private func choices(_ usual: [TimeInterval], current: TimeInterval) -> [TimeInterval] {
+        usual.contains(current) ? usual : (usual + [current]).sorted()
+    }
+
+    private func choice(_ seconds: TimeInterval, current: TimeInterval, _ selector: Selector) -> NSMenuItem {
+        let item = action(duration(seconds), selector)
+        item.representedObject = seconds
+        item.state = seconds == current ? .on : .off
+        return item
+    }
+
+    private func duration(_ seconds: TimeInterval) -> String {
+        seconds < 60 || seconds.truncatingRemainder(dividingBy: 60) != 0
+            ? "\(Int(seconds)) sec"
+            : "\(Int(seconds / 60)) min"
     }
 
     private func info(_ title: String) -> NSMenuItem {
@@ -119,6 +157,17 @@ final class MenuBar: NSObject, NSApplicationDelegate, NSMenuDelegate {
     @objc private func pauseTomorrow() {
         let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for: Date()))!
         scheduler.pause(until: tomorrow, label: "tomorrow")
+    }
+
+    @objc private func setInterval(_ sender: NSMenuItem) {
+        guard let seconds = sender.representedObject as? TimeInterval, seconds != Settings.interval else { return }
+        Settings.interval = seconds
+        scheduler.restartTimer()
+    }
+
+    @objc private func setBreakLength(_ sender: NSMenuItem) {
+        guard let seconds = sender.representedObject as? TimeInterval else { return }
+        Settings.breakLength = seconds
     }
 
     @objc private func openLog() { NSWorkspace.shared.open(Settings.logURL) }

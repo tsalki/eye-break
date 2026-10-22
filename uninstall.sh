@@ -11,5 +11,6 @@ rm -f "$HOME/Library/LaunchAgents/$LABEL.plist" \
       "$BIN/eye-break" \
       "$BIN/eye-break.sh" "$BIN/eye-break-helper"
 rm -rf "$HOME/Library/Application Support/eye-break"
+defaults delete $LABEL 2>/dev/null
 
 print "Uninstalled. Your break log is still at ~/Library/Logs/eye-break.log"
