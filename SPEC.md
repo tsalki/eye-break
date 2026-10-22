@@ -92,10 +92,10 @@ The two more expensive probes only run when they matter: the camera check only w
 
 ### 6.2 Gentle mode (default)
 
-1. A non-activating panel appears in the top-right: "Look away for 20s, whenever you're ready", with **Later** and **Skip** buttons. It never takes keyboard focus.
+1. A small non-activating panel appears at the top center, just under the menu bar: "Look away for 20s", with a **Skip** button. It never takes keyboard focus.
 2. The countdown runs only while there's no keyboard or mouse input, counting from when the panel appeared. Any input restarts it. The panel shows "Looking away… N".
 3. At zero, the "Glass" sound plays, the panel fades out, and `taken` is logged.
-4. **Later** brings it back in 5 minutes. **Skip** waits a full cycle.
+4. **Skip** waits a full cycle.
 5. If it's **ignored** for 2 minutes, it fades and comes back once after 5 minutes. If that one is ignored too, it waits a full cycle. It never escalates.
 
 ### 6.3 Strict mode
@@ -124,7 +124,6 @@ Enabled by changing the default `mode` in `src/Settings.swift` to `.strict`, or 
 2026-10-18T14:20:03	taken	26s
 2026-10-18T14:41:10	natural	away
 2026-10-18T15:01:12	skipped	camera
-2026-10-18T15:21:30	later	-
 2026-10-18T15:28:31	missed	retrying
 2026-10-18T15:35:31	missed	-
 2026-10-18T15:55:40	skipped	user
@@ -140,7 +139,6 @@ Enabled by changing the default `mode` in `src/Settings.swift` to `.strict`, or 
 | `natural` | `away`, `sleep`, `locked` | You were away, which counts as a break |
 | `skipped` | `camera` | A due break waited for a call |
 | `skipped` | `user` | You clicked Skip |
-| `later` | – | You clicked Later |
 | `missed` | `retrying` | A reminder was ignored and will come back |
 | `missed` | – | A reminder was ignored twice |
 | `paused` / `resumed` | `1h`, `tomorrow` / – | Pause from the menu, and its end |
@@ -194,7 +192,7 @@ Before a release, check by hand:
 
 - [ ] The menu bar icon and menu appear and update.
 - [ ] The reminder panel shows, counts down hands-off, and chimes.
-- [ ] Later, Skip, and an ignored reminder behave as in §6.2.
+- [ ] Skip and an ignored reminder behave as in §6.2.
 - [ ] Locking the screen and closing the lid during a reminder log `natural` and dismiss it.
 - [ ] A due break waits while the camera is on.
 - [ ] It starts at login, and Quit keeps it off until the next login.

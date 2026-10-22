@@ -8,7 +8,7 @@ enum Settings {
 
     private static let env = ProcessInfo.processInfo.environment
 
-    /// gentle: corner reminder · strict: black screen
+    /// gentle: small reminder at the top · strict: black screen
     static let mode = Mode(rawValue: env["EYE_BREAK_MODE"] ?? "") ?? .gentle
     /// Screen time between breaks.
     static let interval = env["EYE_BREAK_INTERVAL"].flatMap { TimeInterval($0) } ?? 20 * 60
@@ -20,7 +20,7 @@ enum Settings {
     static let tick: TimeInterval = 5
 
     // Gentle mode
-    /// "Later", or ignoring a reminder once, brings it back after this.
+    /// Ignoring a reminder once brings it back after this.
     static let later: TimeInterval = 5 * 60
     /// An ignored reminder fades after this.
     static let nudgeTimeout: TimeInterval = 2 * 60

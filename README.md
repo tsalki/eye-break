@@ -1,6 +1,6 @@
 # Eye Break
 
-A gentle 20-20-20 reminder for macOS that lives in the menu bar: every 20 minutes, a small panel in the corner asks you to look about 6 m away for 20 seconds. It counts down only while you're hands-off, so it notices when you actually take the break. Starts automatically at login.
+A gentle reminder for macOS that lives in the menu bar and follows the 20-20-20 rule: every 20 minutes, look at something 20 feet (about 6 m) away for 20 seconds. A small panel at the top of the screen asks you to. It counts down only while you're hands-off, so it notices when you actually take the break. Starts automatically at login.
 
 ## Requirements
 
@@ -33,10 +33,10 @@ In Activity Monitor it shows up as `eye-break`.
 
 ## What happens at a break
 
-1. A panel slides into the top-right: "Look away for 20s, whenever you're ready". It doesn't take focus; keep typing if you need to.
+1. A small panel fades in at the top center: "Look away for 20s". It doesn't take focus; keep typing if you need to.
 2. When you take your hands off the keyboard and mouse, it counts down. Touching anything restarts it from 20.
 3. At 0, a soft chime plays and the panel fades out.
-4. **Later** brings it back in 5 minutes. **Skip** waits for the next 20-minute cycle.
+4. **Skip** skips this break and restarts the 20-minute countdown.
 5. If you ignore it, it fades after 2 minutes and comes back once, 5 minutes later. Ignore that too and it waits for the next cycle. Nothing escalates.
 
 The timer resets on its own if you lock the screen, the Mac sleeps, or you're idle for 5+ minutes. Idle time doesn't count while a video is playing (any app keeping the display awake). While the camera is on (video calls), the break waits until it's off.

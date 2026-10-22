@@ -3,7 +3,7 @@ import Foundation
 /// What a reminder reports when it closes.
 enum Outcome {
     case taken(seconds: Int)        // nudge or overlay completed
-    case later, skipped, ignored    // nudge
+    case skipped, ignored           // nudge
     case go, snoozed                // strict-mode warning
     case abandoned(seconds: Int)    // overlay gave up
 }
@@ -178,10 +178,6 @@ final class Scheduler {
             Log.write("taken", "\(seconds)s")
             retried = false
             schedule(in: Settings.interval)
-        case .later:
-            Log.write("later")
-            retried = false
-            schedule(in: Settings.later)
         case .skipped:
             Log.write("skipped", "user")
             retried = false

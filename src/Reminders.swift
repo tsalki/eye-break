@@ -26,13 +26,21 @@ func label(_ text: String, size: CGFloat, color: NSColor) -> NSTextField {
     return field
 }
 
-/// Small panel in the top-right corner, sized to fit its contents.
-/// Non-activating, so it never steals focus from what you're typing.
-func cornerPanel(views: [NSView]) -> NSPanel {
+func smallButton(_ title: String, target: AnyObject, action: Selector) -> NSButton {
+    let button = NSButton(title: title, target: target, action: action)
+    button.controlSize = .small
+    button.font = .systemFont(ofSize: NSFont.smallSystemFontSize)
+    return button
+}
+
+/// Small pill at the top center, just under the menu bar, sized to fit its
+/// contents. Non-activating, so it never steals focus from what you're typing.
+func topPanel(views: [NSView]) -> NSPanel {
     let row = NSStackView(views: views)
-    row.spacing = 12
+    row.spacing = 8
     let fitting = row.fittingSize
-    let size = NSSize(width: fitting.width + 40, height: max(56, fitting.height + 24))
+    let height = fitting.height + 12
+    let size = NSSize(width: fitting.width + height, height: height)
 
     let panel = NSPanel(
         contentRect: NSRect(origin: .zero, size: size),
@@ -42,7 +50,7 @@ func cornerPanel(views: [NSView]) -> NSPanel {
     background.material = .hudWindow
     background.state = .active
     background.wantsLayer = true
-    background.layer?.cornerRadius = 12
+    background.layer?.cornerRadius = height / 2
 
     row.translatesAutoresizingMaskIntoConstraints = false
     background.addSubview(row)
@@ -59,7 +67,7 @@ func cornerPanel(views: [NSView]) -> NSPanel {
     panel.hidesOnDeactivate = false
     panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
     if let screen = NSScreen.main?.visibleFrame {
-        panel.setFrameOrigin(NSPoint(x: screen.maxX - size.width - 16, y: screen.maxY - size.height - 16))
+        panel.setFrameOrigin(NSPoint(x: screen.midX - size.width / 2, y: screen.maxY - size.height - 8))
     }
     return panel
 }
@@ -77,7 +85,7 @@ func fade(_ window: NSWindow, to alpha: CGFloat, then done: (() -> Void)? = nil)
 /// hands-off, and restarts if you touch anything.
 final class Nudge: NSObject, Reminder {
     private let done: (Outcome) -> Void
-    private let text = label("", size: 15, color: .labelColor)
+    private let text = label("", size: 13, color: .labelColor)
     private var panel: NSPanel!
     private var timer: Timer?
     private let shown = Date()
@@ -86,10 +94,9 @@ final class Nudge: NSObject, Reminder {
         self.done = done
         super.init()
         update(handsOff: 0)  // longest text, so the panel is sized for it
-        panel = cornerPanel(views: [
+        panel = topPanel(views: [
             text,
-            NSButton(title: "Later", target: self, action: #selector(later)),
-            NSButton(title: "Skip", target: self, action: #selector(skip)),
+            smallButton("Skip", target: self, action: #selector(skip)),
         ])
         panel.alphaValue = 0
         panel.orderFrontRegardless()
@@ -115,7 +122,7 @@ final class Nudge: NSObject, Reminder {
     private func update(handsOff: TimeInterval) {
         let seconds = Settings.breakLength
         text.stringValue = handsOff < 1
-            ? "Look away for \(Int(seconds))s, whenever you're ready"
+            ? "👁 Look away for \(Int(seconds))s"
             : "Looking away… \(Int((seconds - handsOff).rounded(.up)))"
     }
 
@@ -140,7 +147,6 @@ final class Nudge: NSObject, Reminder {
         return true
     }
 
-    @objc private func later() { close(.later) }
     @objc private func skip() { close(.skipped) }
 }
 
@@ -149,7 +155,7 @@ final class Nudge: NSObject, Reminder {
 /// Countdown to the black overlay.
 final class Warning: NSObject, Reminder {
     private let done: (Outcome) -> Void
-    private let text = label("", size: 15, color: .labelColor)
+    private let text = label("", size: 13, color: .labelColor)
     private var panel: NSPanel!
     private var timer: Timer?
     private var remaining = Settings.warning
@@ -160,9 +166,9 @@ final class Warning: NSObject, Reminder {
         update()
         var views: [NSView] = [text]
         if allowSnooze {
-            views.append(NSButton(title: "Snooze 2 min", target: self, action: #selector(snooze)))
+            views.append(smallButton("Snooze 2 min", target: self, action: #selector(snooze)))
         }
-        panel = cornerPanel(views: views)
+        panel = topPanel(views: views)
         panel.orderFrontRegardless()
         timer = repeatingTimer(1) { [weak self] in self?.tick() }
     }
