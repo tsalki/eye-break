@@ -119,11 +119,20 @@ final class Nudge: NSObject, Reminder {
         }
     }
 
+    /// The system font lacks polytonic Greek, so the motto gets one that has it.
+    private static let promptFont = NSFont.monospacedDigitSystemFont(ofSize: 13, weight: .light)
+    private static let mottoFont = NSFont(name: "Palatino", size: 13) ?? promptFont
+
     private func update(handsOff: TimeInterval) {
         let seconds = Settings.breakLength
-        text.stringValue = handsOff < 1
-            ? "👁 Look away for \(Int(seconds))s"
-            : "Looking away… \(Int((seconds - handsOff).rounded(.up)))"
+        if handsOff < 1 {
+            text.font = Self.promptFont
+            text.stringValue = "👁 Your eyes could use some distance and a few blinks"
+        } else {
+            // "A healthy mind in a healthy body"
+            text.font = Self.mottoFont
+            text.stringValue = "Νοῦς ὑγιὴς ἐν σώματι ὑγιεῖ · \(Int((seconds - handsOff).rounded(.up)))"
+        }
     }
 
     private func close(_ outcome: Outcome) {

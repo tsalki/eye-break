@@ -92,8 +92,8 @@ The two more expensive probes only run when they matter: the camera check only w
 
 ### 6.2 Gentle mode (default)
 
-1. A small non-activating panel appears at the top center, just under the menu bar: "Look away for 20s", with a **Skip** button. It never takes keyboard focus.
-2. The countdown runs only while there's no keyboard or mouse input, counting from when the panel appeared. Any input restarts it. The panel shows "Looking away… N".
+1. A small non-activating panel appears at the top center, just under the menu bar: "Your eyes could use some distance and a few blinks", with a **Skip** button. It never takes keyboard focus.
+2. The countdown runs only while there's no keyboard or mouse input, counting from when the panel appeared. Any input restarts it. The panel shows "Νοῦς ὑγιὴς ἐν σώματι ὑγιεῖ · N" ("a healthy mind in a healthy body") in Palatino, since the system font lacks polytonic Greek.
 3. At zero, the "Glass" sound plays, the panel fades out, and `taken` is logged.
 4. **Skip** waits a full cycle.
 5. If it's **ignored** for 2 minutes, it fades and comes back once after 5 minutes. If that one is ignored too, it waits a full cycle. It never escalates.

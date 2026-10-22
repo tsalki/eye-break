@@ -33,8 +33,8 @@ In Activity Monitor it shows up as `eye-break`.
 
 ## What happens at a break
 
-1. A small panel fades in at the top center: "Look away for 20s". It doesn't take focus; keep typing if you need to.
-2. When you take your hands off the keyboard and mouse, it counts down. Touching anything restarts it from 20.
+1. A small panel fades in at the top center: "Your eyes could use some distance and a few blinks". It doesn't take focus; keep typing if you need to.
+2. When you take your hands off the keyboard and mouse, it counts down under the motto «Νοῦς ὑγιὴς ἐν σώματι ὑγιεῖ», ancient Greek for "a healthy mind in a healthy body". Touching anything restarts it from 20.
 3. At 0, a soft chime plays and the panel fades out.
 4. **Skip** skips this break and restarts the 20-minute countdown.
 5. If you ignore it, it fades after 2 minutes and comes back once, 5 minutes later. Ignore that too and it waits for the next cycle. Nothing escalates.
